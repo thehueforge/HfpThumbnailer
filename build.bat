@@ -46,6 +46,9 @@ if not exist "HfpThumbnailHandler.csproj" (
     exit /b 1
 )
 
+REM Clean up COM processes that might be locking the DLL
+call :CleanupCOMProcesses
+
 dotnet clean HfpThumbnailHandler.csproj
 dotnet restore HfpThumbnailHandler.csproj
 dotnet build HfpThumbnailHandler.csproj --configuration Release /p:RegisterForComInterop=false
@@ -77,6 +80,9 @@ if not exist "HfpThumbnailHandler.csproj" (
     pause
     exit /b 1
 )
+
+REM Clean up COM processes that might be locking the DLL
+call :CleanupCOMProcesses
 
 REM Build
 dotnet clean HfpThumbnailHandler.csproj
@@ -126,6 +132,9 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+REM Clean up COM processes before unregistering
+call :CleanupCOMProcesses
+
 REM Unregister COM
 if exist "bin\Release\net48\HfpThumbnailHandler.dll" (
     echo Unregistering COM component with %REGASM_PATH%
@@ -171,6 +180,31 @@ if exist "%WINDIR%\Microsoft.NET\Framework\v4.0.30319\regasm.exe" (
 
 REM Could add more versions here if needed (v4.5, v4.6, etc.)
 echo regasm.exe not found in standard locations
+goto :eof
+
+:CleanupCOMProcesses
+echo Cleaning up COM processes and file locks...
+
+REM Kill COM Surrogate processes (dllhost.exe)
+tasklist /FI "IMAGENAME eq dllhost.exe" 2>nul | find /I "dllhost.exe" >nul
+if %ERRORLEVEL% EQU 0 (
+    echo Stopping COM Surrogate processes...
+    taskkill /f /im dllhost.exe >nul 2>&1
+    timeout /t 1 /nobreak >nul
+)
+
+REM Kill Windows Explorer (will restart automatically)
+tasklist /FI "IMAGENAME eq explorer.exe" 2>nul | find /I "explorer.exe" >nul
+if %ERRORLEVEL% EQU 0 (
+    echo Stopping Explorer to release thumbnail handler locks...
+    taskkill /f /im explorer.exe >nul 2>&1
+    timeout /t 2 /nobreak >nul
+    echo Starting Explorer...
+    start explorer.exe
+    timeout /t 1 /nobreak >nul
+)
+
+echo COM cleanup completed
 goto :eof
 
 :RestartExplorer

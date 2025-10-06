@@ -1,14 +1,15 @@
 # HFP Thumbnail Handler
 
-Windows Shell Extension for displaying thumbnails of HueForge Project files (.hfp) with OneDrive support.
+Windows Shell Extension for displaying thumbnails of HueForge Project files (.hfp) in Windows Explorer.
 
 ## Features
 
 - ✅ Shows thumbnail previews of .hfp files in Windows Explorer
-- ✅ **OneDrive support** - works with on-demand synced files
-- ✅ Optimized performance with precompiled Regex patterns
-- ✅ Comprehensive error handling and logging
-- ✅ Automatic thumbnail cache management
+- ✅ **Full OneDrive support** - works seamlessly with OneDrive folders and on-demand files
+- ✅ **Universal cloud storage** - supports OneDrive Personal, Business, and Google Drive
+- ✅ High-performance with precompiled Regex patterns and optimized file detection
+- ✅ Robust error handling with detailed logging
+- ✅ Automatic thumbnail cache management and COM cleanup
 
 ## Quick Setup
 
@@ -44,17 +45,23 @@ Run `build.bat` as Administrator and choose:
 
 ## Key Features
 
-### OneDrive Support
-- **Smart Detection**: Automatically detects OneDrive folders
-- **On-Demand Files**: Handles files that aren't downloaded locally
-- **Multiple Accounts**: Supports Personal and Business OneDrive
-- **Performance Optimized**: Precompiled Regex patterns for path detection
+### Cloud Storage Support
+- **OneDrive Integration**: Full support for OneDrive Personal and Business accounts
+- **On-Demand Files**: Automatically handles files that aren't downloaded locally
+- **Smart Path Detection**: Uses registry scanning and intelligent path matching
+- **Google Drive Compatible**: Works with Google Drive folders as before
+
+### Performance & Reliability
+- **Optimized Detection**: Precompiled Regex patterns for fast path recognition
+- **Robust File Handling**: Advanced file availability checking and error recovery
+- **Automatic Cleanup**: Built-in COM process management prevents build conflicts
+- **Enhanced Logging**: Detailed debug information in `%TEMP%\hfp_thumbnail_debug.log`
 
 ### Technical Features
 - Base64 image extraction from HFP JSON files
-- Fallback thumbnail generation for corrupted files
-- Comprehensive error logging (`%TEMP%\hfp_thumbnail_debug.log`)
-- Windows Explorer integration (Large Icons, Extra Large Icons)
+- Intelligent fallback thumbnail generation
+- Windows Explorer integration (all icon sizes)
+- Multi-layered cloud storage detection system
 
 ## Project Structure
 
