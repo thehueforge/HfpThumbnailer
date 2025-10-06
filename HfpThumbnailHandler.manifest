@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity version="1.0.0.1" name="HueForge.ThumbnailHandler" />
+  <file name="HueForge Thumbnail.dll">
+    <comClass
+      clsid="{A2ECD1CB-B5D5-4136-82CA-9E4D994DABB3}"
+      progid="HueForge.ThumbnailHandler"
+      threadingModel="Apartment"
+      description="HFP Thumbnail Handler" />
+  </file>
+</assembly>
