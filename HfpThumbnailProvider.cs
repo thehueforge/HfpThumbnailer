@@ -55,14 +55,14 @@ namespace HfpThumbnailHandler
             _filePath = pszFilePath;
             LogMessage($"InitializeWithFile called for: {_filePath}");
             
-            // ONEDRIVE FIX: Major limitation was that OneDrive "on-demand" files don't show thumbnails
+            // Major limitation was that OneDrive "on-demand" files don't show thumbnails
             // This detection helps identify OneDrive files to handle them differently
             bool isOneDrive = IsOneDriveFile(_filePath);
             LogMessage($"OneDrive detection: {isOneDrive}");
             
             if (isOneDrive)
             {
-                // ONEDRIVE FIX: Check if the file is actually downloaded locally vs just a placeholder
+                // Check if the file is actually downloaded locally vs just a placeholder
                 // OneDrive "on-demand" files appear in Explorer but aren't fully downloaded
                 bool isLocallyAvailable = IsOneDriveFileAvailableLocally(_filePath);
                 LogMessage($"OneDrive file locally available: {isLocallyAvailable}");
@@ -75,7 +75,7 @@ namespace HfpThumbnailHandler
             
             try
             {
-                // ONEDRIVE FIX: Use smart file access that can handle OneDrive on-demand files
+                // Use smart file access that can handle OneDrive on-demand files
                 // Standard File.OpenRead() fails on OneDrive placeholders
                 Stream fileStream = CreateFileStream(_filePath);
                 _stream = new StreamWrapper(fileStream); // Wraps Stream in IStream for compatibility
@@ -86,7 +86,7 @@ namespace HfpThumbnailHandler
                 LogMessage($"Error initializing from file: {ex.Message}");
                 if (isOneDrive)
                 {
-                    // ONEDRIVE FIX: Provide user-friendly error message specific to OneDrive issues
+                    // Provide user-friendly error message specific to OneDrive issues
                     LogMessage("OneDrive-specific error: This may be due to on-demand sync. " +
                              "Try setting the file to 'Always keep on this device' in OneDrive settings.");
                 }
@@ -108,7 +108,7 @@ namespace HfpThumbnailHandler
             hBitmap = IntPtr.Zero;
             bitmapType = WTS_ALPHATYPE.WTSAT_UNKNOWN;
 
-            // ONEDRIVE FIX: Additional OneDrive context during thumbnail generation
+            // Additional OneDrive context during thumbnail generation
             // This helps with debugging and provides better error context
             if (!string.IsNullOrEmpty(_filePath))
             {
@@ -117,7 +117,7 @@ namespace HfpThumbnailHandler
                 {
                     LogMessage($"Processing OneDrive file for thumbnail: {_filePath}");
                     
-                    // ONEDRIVE FIX: Double-check file availability at thumbnail time
+                    // Double-check file availability at thumbnail time
                     // File status can change between Initialize() and GetThumbnail() calls
                     bool isAvailable = IsOneDriveFileAvailableLocally(_filePath);
                     LogMessage($"OneDrive file availability status: {(isAvailable ? "Available" : "On-demand")}");
@@ -238,7 +238,7 @@ namespace HfpThumbnailHandler
             {
                 LogMessage($"Error creating thumbnail: {ex.Message}");
                 
-                // ONEDRIVE FIX: Provide visual feedback for OneDrive-specific failures
+                // Provide visual feedback for OneDrive-specific failures
                 // Instead of generic error, show user this is a OneDrive file with distinctive icon
                 if (!string.IsNullOrEmpty(_filePath) && IsOneDriveFile(_filePath))
                 {
@@ -378,7 +378,7 @@ namespace HfpThumbnailHandler
 
         #region OneDrive Detection
         
-        // ONEDRIVE FIX: Core limitation was that OneDrive files don't show thumbnails
+        // Core limitation was that OneDrive files don't show thumbnails
         // Unlike Google Drive (which downloads files locally), OneDrive uses "on-demand" sync
         // where files appear in Explorer but aren't actually downloaded until accessed
         // This section implements comprehensive OneDrive detection and handling
@@ -389,7 +389,7 @@ namespace HfpThumbnailHandler
         // - CreateFileStream(): Smart file access that works with OneDrive
         //
         // OPTIONAL ENHANCEMENTS
-        // - GetOneDrivePaths(): Comprehensive registry scanning for all OneDrive types
+        // - GetOneDrivePaths(): Comprehensive registry scanning for all OneDrive typesW
         // - TryForceOneDriveDownload(): Attempt automatic download of on-demand files
         // - CreateOneDriveFallbackThumbnail(): Visual feedback for OneDrive-specific errors
         // - Extensive logging and error handling for debugging
@@ -761,7 +761,7 @@ namespace HfpThumbnailHandler
 
         private Stream ConvertToStream(IStream comStream)
         {
-            // ONEDRIVE FIX: Enhanced stream conversion with OneDrive context
+            // Enhanced stream conversion with OneDrive context
             // When OneDrive files fail to load, this provides better error messages
             const int bufferSize = 4096;
             var memoryStream = new MemoryStream();
